@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Learn C# for Web Dev</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-xl font-bold">Learn C# for Web Dev</a>
+                    <div class="hidden md:flex space-x-4">
+                        <a href="/Tracks" class="hover:text-blue-200">Tracks</a>
+                        <a href="/Projects" class="hover:text-blue-200">Projects</a>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a href="/Dashboard" class="hover:text-blue-200">Dashboard</a>
+                        }
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm">Welcome, @User.Identity.Name</span>
+                            <a href="/Auth/Logout" class="bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded">Logout</a>
+                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/Admin" class="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded text-black">Admin</a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="/Auth/Login" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded">Login</a>
+                        <a href="/Auth/Register" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded">Register</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-8 px-4">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto py-8 px-4">
+            <div class="text-center">
+                <p>&copy; 2024 Learn C# for Web Dev. Built with ASP.NET Core and Tailwind CSS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

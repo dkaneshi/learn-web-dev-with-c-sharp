@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  learncsharp-web:
+    build: .
+    ports:
+      - "5173:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/learncsharp.db
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./lab-content:/app/lab-content
+    depends_on:
+      - redis
+    
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

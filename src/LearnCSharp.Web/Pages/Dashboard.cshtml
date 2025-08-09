@@ -1,0 +1,135 @@
+@page
+@model DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="grid lg:grid-cols-4 gap-8">
+    <div class="lg:col-span-3">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Learning Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    @Model.TotalXp XP
+                </div>
+                @if (Model.CurrentStreak > 0)
+                {
+                    <div class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        🔥 @Model.CurrentStreak day streak
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model.RecentBadges.Any())
+        {
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <h3 class="font-semibold text-yellow-800 mb-2">🎉 New Badges Earned!</h3>
+                <div class="flex space-x-2">
+                    @foreach (var badge in Model.RecentBadges)
+                    {
+                        <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm">
+                            @badge.Icon @badge.Name
+                        </span>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Continue Learning</h2>
+            
+            @if (Model.NextLesson != null)
+            {
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-semibold text-lg">@Model.NextLesson.Title</h3>
+                            <p class="text-gray-600 text-sm">@Model.NextLesson.Track.Title</p>
+                            <div class="flex items-center mt-2 text-sm text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                @Model.NextLesson.DurationMinutes min
+                            </div>
+                        </div>
+                        <a href="/Lesson/@Model.NextLesson.Slug" 
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">
+                            Continue
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-8">
+                    <p class="text-gray-600 mb-4">Great job! You've completed all available lessons.</p>
+                    <a href="/Projects" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded font-semibold">
+                        View Projects
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">Your Progress</h2>
+            
+            @foreach (var track in Model.TrackProgress)
+            {
+                var completed = track.Value;
+                var total = track.Key.Lessons.Count;
+                var percentage = total > 0 ? (double)completed / total * 100 : 0;
+                
+                <div class="mb-4 last:mb-0">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium">@track.Key.Title</h3>
+                        <span class="text-sm text-gray-600">@completed/@total lessons</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                             style="width: @percentage%"></div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="font-semibold mb-4">Your Badges</h3>
+            @if (Model.UserBadges.Any())
+            {
+                <div class="space-y-2">
+                    @foreach (var badge in Model.UserBadges.Take(5))
+                    {
+                        <div class="flex items-center space-x-2 text-sm">
+                            <span class="text-lg">@badge.Badge.Icon</span>
+                            <span>@badge.Badge.Name</span>
+                        </div>
+                    }
+                </div>
+                @if (Model.UserBadges.Count > 5)
+                {
+                    <p class="text-sm text-gray-600 mt-2">And @(Model.UserBadges.Count - 5) more...</p>
+                }
+            }
+            else
+            {
+                <p class="text-gray-600 text-sm">Complete lessons to earn badges!</p>
+            }
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="font-semibold mb-4">Quick Links</h3>
+            <div class="space-y-2">
+                <a href="/Tracks" class="block text-blue-600 hover:text-blue-800 text-sm">
+                    Browse All Tracks
+                </a>
+                <a href="/Projects" class="block text-blue-600 hover:text-blue-800 text-sm">
+                    View Projects
+                </a>
+                <a href="/Profile" class="block text-blue-600 hover:text-blue-800 text-sm">
+                    Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

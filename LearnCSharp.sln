@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnCSharp.Web", "src\LearnCSharp.Web\LearnCSharp.Web.csproj", "{2E8D8F8A-1234-4567-8901-234567890123}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnCSharp.Core", "src\LearnCSharp.Core\LearnCSharp.Core.csproj", "{3E8D8F8A-1234-4567-8901-234567890124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnCSharp.Tests", "tests\LearnCSharp.Tests\LearnCSharp.Tests.csproj", "{4E8D8F8A-1234-4567-8901-234567890125}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E8D8F8A-1234-4567-8901-234567890123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8D8F8A-1234-4567-8901-234567890123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8D8F8A-1234-4567-8901-234567890123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8D8F8A-1234-4567-8901-234567890123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E8D8F8A-1234-4567-8901-234567890124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8D8F8A-1234-4567-8901-234567890124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8D8F8A-1234-4567-8901-234567890124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E8D8F8A-1234-4567-8901-234567890124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E8D8F8A-1234-4567-8901-234567890125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E8D8F8A-1234-4567-8901-234567890125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E8D8F8A-1234-4567-8901-234567890125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E8D8F8A-1234-4567-8901-234567890125}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -352,3 +352,4 @@ logs/
 appsettings.Local.json
 lab-workspaces/
 temp/
+.idea/

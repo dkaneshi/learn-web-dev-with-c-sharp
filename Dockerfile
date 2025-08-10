@@ -14,15 +14,5 @@ RUN dotnet publish "LearnCSharp.Web.csproj" -c Release -o /app/publish /p:UseApp
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y \
-    wget \
-    apt-transport-https \
-    && wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-8.0 \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LearnCSharp.Web.dll"]

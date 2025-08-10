@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   learncsharp-web:
     build: .
@@ -15,7 +13,7 @@ services:
       - ./lab-content:/app/lab-content
     depends_on:
       - redis
-    
+
   redis:
     image: redis:7-alpine
     ports:

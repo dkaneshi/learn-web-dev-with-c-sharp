@@ -83,14 +83,75 @@ public class DashboardModel : PageModel
             .Select(p => p.LessonId)
             .ToHashSet();
 
-        var nextLesson = await _context.Lessons
-            .Include(l => l.Track)
-            .Where(l => l.IsPublished)
-            .Where(l => inProgressLessonIds.Contains(l.Id) || !completedLessonIds.Contains(l.Id))
-            .OrderBy(l => l.Track.Order)
-            .ThenBy(l => l.Order)
+        // First priority: Return any lesson that's currently in progress
+        if (inProgressLessonIds.Any())
+        {
+            var inProgressLesson = await _context.Lessons
+                .Include(l => l.Track)
+                .Where(l => l.IsPublished && inProgressLessonIds.Contains(l.Id))
+                .OrderBy(l => l.Track.Order)
+                .ThenBy(l => l.Order)
+                .FirstOrDefaultAsync();
+            
+            if (inProgressLesson != null)
+                return inProgressLesson;
+        }
+
+        // Get all lesson IDs where user has progress (completed or in-progress)
+        var userProgressLessonIds = userProgress.Select(p => p.LessonId).ToHashSet();
+
+        // Second priority: Find the next uncompleted lesson in a track where user has made progress
+        if (userProgressLessonIds.Any())
+        {
+            // Get tracks that contain lessons where user has progress
+            var tracksWithProgress = await _context.Tracks
+                .Include(t => t.Lessons)
+                .Where(t => t.IsPublished)
+                .OrderBy(t => t.Order)
+                .ToListAsync();
+
+            // Filter tracks that have user progress
+            var relevantTracks = tracksWithProgress
+                .Where(t => t.Lessons.Any(l => userProgressLessonIds.Contains(l.Id)))
+                .ToList();
+
+            foreach (var track in relevantTracks)
+            {
+                var nextLessonInTrack = track.Lessons
+                    .Where(l => l.IsPublished && !completedLessonIds.Contains(l.Id))
+                    .OrderBy(l => l.Order)
+                    .FirstOrDefault();
+                
+                if (nextLessonInTrack != null)
+                {
+                    // Load the track reference for the lesson
+                    nextLessonInTrack.Track = track;
+                    return nextLessonInTrack;
+                }
+            }
+        }
+
+        // Third priority: Find the first lesson of the first track (new user scenario)
+        var firstTrack = await _context.Tracks
+            .Include(t => t.Lessons)
+            .Where(t => t.IsPublished)
+            .OrderBy(t => t.Order)
             .FirstOrDefaultAsync();
 
-        return nextLesson;
+        if (firstTrack != null)
+        {
+            var firstLesson = firstTrack.Lessons
+                .Where(l => l.IsPublished)
+                .OrderBy(l => l.Order)
+                .FirstOrDefault();
+            
+            if (firstLesson != null)
+            {
+                firstLesson.Track = firstTrack;
+                return firstLesson;
+            }
+        }
+
+        return null;
     }
 }
